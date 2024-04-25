@@ -4,6 +4,7 @@ from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 
+from output_parsers import summary_parser
 from third_parties.linkedin import scrape_linkedin_profile
 from agents.linkedin_lookup_agent import lookup as linkedin_lookup_agent
 from agents.twitter_lookup_agent import lookup as twitter_lookup_agent
@@ -27,14 +28,18 @@ def ice_break_with(name: str) -> str:
     2. two interesting facts about them
     
     Use both information from twitter and Linkedin to create the summary
+    \n{format_instructions}
     """
 
     summary_prompt_template = PromptTemplate(
-        input_variables=["information", "twitter_posts"], template=summary_template
+        input_variables=["information", "twitter_posts"],
+        template=summary_template,
+        partial_variables={"format_instructions":summary_parser.get_format_instructions()},
     )
 
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
-    chain = LLMChain(llm=llm, prompt=summary_prompt_template)
+    # chain = LLMChain(llm=llm, prompt=summary_prompt_template)
+    chain = summary_prompt_template | llm | summary_parser
 
     res = chain.invoke(input={"information": linkedin_data, "twitter_posts": tweets})
 
