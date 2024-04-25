@@ -5,6 +5,12 @@ name = "pypi"
 
 [packages]
 python-dotenv = "*"
+langchain = "*"
+langchain-openai = "*"
+google-search-results = "*"
+black = "*"
+langchainhub = "*"
+tweepy = "*"
 
 [dev-packages]
 

@@ -10,8 +10,7 @@ from langchain.agents import (
     AgentExecutor,
 )
 from langchain import hub
-
-from tools.tools import get_profile_url
+from tools.tools import get_profile_url_tavily
 
 
 def lookup(name: str) -> str:
@@ -30,7 +29,7 @@ def lookup(name: str) -> str:
     tools_for_agent = [
         Tool(
             name="Crawl Google 4 linkedin profile page",
-            func=get_profile_url,
+            func=get_profile_url_tavily,
             description="useful for when you need get the Linkedin page URL",
         )
     ]
